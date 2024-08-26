@@ -1,0 +1,29 @@
+int laserPin = D5;    // Pin connected to the laser emitter
+int buttonPin = D2;   // Pin connected to the button
+
+bool laserState = LOW;  // Current state of the laser
+bool lastButtonState = HIGH; // Previous state of the button
+
+void setup() {
+  pinMode(laserPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP); // Use internal pull-up resistor
+  digitalWrite(laserPin, laserState); // Ensure laser is off initially
+}
+
+void loop() {
+  // Read the button state
+  bool buttonState = digitalRead(buttonPin);
+
+  // Check if the button is pressed (LOW) and was not pressed before
+  if (buttonState == LOW && lastButtonState == HIGH) {
+    // Toggle the laser state
+    laserState = !laserState;
+    digitalWrite(laserPin, laserState);
+    
+    // Debounce delay
+    delay(50);
+  }
+
+  // Save the current button state for the next loop iteration
+  lastButtonState = buttonState;
+}
